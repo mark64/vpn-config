@@ -1,0 +1,51 @@
+
+[ req ]
+default_bits = 4096
+req_extensions = ext_client
+utf8 = yes
+distinguished_name = base_dn
+
+name_opt = utf8,oneline
+cert_opt = ext_error
+
+[ ext_client ]
+basicConstraints = critical, CA:FALSE
+keyUsage = critical, digitalSignature, keyEncipherment, keyAgreement
+extendedKeyUsage = critical, clientAuth, emailProtection, timeStamping
+subjectKeyIdentifier = hash
+#authorityKeyIdentifier = keyid
+tlsfeature = status_request_v2
+
+[ ext_server ]
+basicConstraints = critical, CA:FALSE
+keyUsage = critical, digitalSignature, keyEncipherment, keyAgreement
+extendedKeyUsage = critical, serverAuth, emailProtection, timeStamping
+subjectKeyIdentifier = hash
+#authorityKeyIdentifier = keyid
+tlsfeature = status_request_v2
+
+[ base_dn ]
+countryName = Country Name (2 letter)
+countryName_default = US
+countryName_min = 2
+countryName_max = 2
+
+stateOrProvinceName = State or Province Name (full name)
+stateOrProvinceName_default = California
+
+localityName = Locality Name (eg, city)
+localityName_default = Berkeley
+
+organizationName = Organization Name (eg, company)
+organizationName_default = drfcx
+
+organizationalUnitName = Organization Unit Name (eg, section)
+organizationalUnitName_default = vpn
+
+commonName = Common Name (eg, YOUR name, FQDN)
+commonName_default = vpn.drfcx.com
+commonName_max = 100
+
+emailAddress = Email Address
+emailAddress_default = vpn.drfcx.com
+emailAddress_max = 200

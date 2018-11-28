@@ -1,0 +1,30 @@
+#!/bin/sh
+
+if [ "$#" -lt 2 ]; then
+	echo "need client cert file and private key as an arguments"
+	exit -1
+fi
+
+BASE=/etc/openvpn/clients/vpnbase.conf
+CONFIG=`dirname $1`/drfcxvpn.ovpn
+CAFILE=/etc/openvpn/clients/ca.crt
+CERTFILE=$1
+KEYFILE=$2
+
+cat $CERTFILE $KEYFILE > `dirname $1`/tmp.pem
+openssl pkcs12 -in `dirname $1`/tmp.pem -export > `dirname $1`/identity.p12 -password pass:20481sc00l
+rm `dirname $1`/tmp.pem
+
+cp $BASE $CONFIG
+chmod og-rwx $CONFIG
+
+echo '<ca>' >> $CONFIG
+cat $CAFILE >> $CONFIG
+echo '</ca>' >> $CONFIG
+
+echo '<tls-auth>' >> $CONFIG
+cat /etc/openvpn/keys/ta.key >> $CONFIG
+echo '</tls-auth>' >> $CONFIG
+
+chown mark: $CONFIG
+

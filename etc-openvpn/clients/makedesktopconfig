@@ -1,0 +1,32 @@
+#!/bin/sh
+
+if [ "$#" -lt 1 ]; then
+	echo "need client cert file as an argument"
+	exit -1
+fi
+
+BASE=vpnbase.conf
+CONFIG=`dirname $1`/drfcxvpn.conf
+CAFILE=ca.crt
+CERTFILE=$1
+
+cp $BASE $CONFIG
+chmod og-rwx $CONFIG
+
+printf '\npull-filter ignore "redirect-gateway"\n\n' >> $CONFIG
+
+echo "########## IMPORTANT ############" >> $CONFIG
+echo "key <ENTER SSL KEY PATH HERE>" >> $CONFIG
+echo "tls-auth <RETIEVE AND ENTER STATIC KEY PATH HERE> 1" >> $CONFIG
+echo "" >> $CONFIG
+
+echo "<ca>" >> $CONFIG
+cat $CAFILE >> $CONFIG
+echo "</ca>" >> $CONFIG
+
+echo "<cert>" >> $CONFIG
+cat $CERTFILE >> $CONFIG
+echo "</cert>" >> $CONFIG
+
+chown mark: $CONFIG
+
